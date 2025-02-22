@@ -1,0 +1,30 @@
+.confirm-container {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+  }
+  
+  .progress-container {
+    position: relative;
+    text-align: center;
+  }
+  
+  .progress-icon {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .confirm-card {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .confirm-card .list-group-item {
+    border-left: 4px solid #37cad4; /* Green Left Border */
+    padding: 10px;
+    font-size: 16px;
+  }
+  
