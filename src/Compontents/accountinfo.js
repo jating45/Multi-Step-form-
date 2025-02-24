@@ -17,7 +17,6 @@ import { FaUser, FaLock, FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa";
 const FormWizard = () => {
   const navigate = useNavigate();
 
-  // Function to get data from localStorage
   const getStoredData = () => {
     const storedData = localStorage.getItem("accountInfo");
     return storedData
@@ -30,7 +29,6 @@ const FormWizard = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // Save form data to localStorage on change
   useEffect(() => {
     localStorage.setItem("accountInfo", JSON.stringify(formData));
   }, [formData]);
@@ -40,14 +38,32 @@ const FormWizard = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const validateEmail = (email) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
+  const validatePassword = (password) => {
+    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
+  };
+
   const validateStep = () => {
     let newErrors = {};
     if (!formData.username) newErrors.username = "Username is required";
-    if (!formData.email) newErrors.email = "Email is required";
-    if (!formData.password) newErrors.password = "Password is required";
-    if (!formData.confirmPassword) newErrors.confirmPassword = "Confirm Password is required";
-    if (formData.password !== formData.confirmPassword)
+    if (!formData.email) {
+      newErrors.email = "Email is required";
+    } else if (!validateEmail(formData.email)) {
+      newErrors.email = "Invalid email format";
+    }
+    if (!formData.password) {
+      newErrors.password = "Password is required";
+    } else if (!validatePassword(formData.password)) {
+      newErrors.password = "Password must be at least 8 characters, include an uppercase, lowercase, number, and special character";
+    }
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = "Confirm Password is required";
+    } else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -55,7 +71,7 @@ const FormWizard = () => {
 
   const handleNext = () => {
     if (validateStep()) {
-      navigate("/personlinfo"); 
+      navigate("/personlinfo");
     }
   };
 
