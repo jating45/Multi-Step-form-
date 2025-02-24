@@ -40,7 +40,7 @@ const PaymentStep = () => {
 
 
   useEffect(() => {
-    localStorage.setItem("paymentInfo", JSON.stringify(formData));
+    localStorage.setItem("cardInfo", JSON.stringify(formData));
   }, [formData]);
 
 
