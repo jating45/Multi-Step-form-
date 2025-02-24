@@ -12,7 +12,7 @@ import {
   CProgress,
   CSpinner,
 } from "@coreui/react";
-import "./confirmationpage.css"; 
+import "./confirmationpage.css";
 
 const ConfirmationPage = () => {
   const navigate = useNavigate();
@@ -22,31 +22,28 @@ const ConfirmationPage = () => {
 
   useEffect(() => {
     const fetchData = () => {
-      let storedData = location.state;
-      console.log("Location state data:", storedData);
+      let personalInfo = JSON.parse(localStorage.getItem("personalInfo")) || {};
+      let accountInfo = JSON.parse(localStorage.getItem("accountInfo")) || {};
+      let cardInfo = JSON.parse(localStorage.getItem("cardInfo")) || {};
 
-      if (!storedData) {
-        const savedData = localStorage.getItem("formData");
-        console.log("Retrieved from localStorage:", savedData);
+      console.log("Fetched personalInfo:", personalInfo);
+      console.log("Fetched accountInfo:", accountInfo);
+      console.log("Fetched cardInfo:", cardInfo);
 
-        if (savedData) {
-          storedData = JSON.parse(savedData);
-        }
-      }
+      const mergedData = { ...personalInfo, ...accountInfo, ...cardInfo };
 
-      if (storedData) {
-        setFormData(storedData);
-        console.log("Final data to set:", storedData);
-      } else {
+      if (Object.keys(mergedData).length === 0) {
         console.warn("No form data found, redirecting...");
         navigate("/");
+      } else {
+        setFormData(mergedData);
       }
 
       setLoading(false);
     };
 
     fetchData();
-  }, [location.state, navigate]);
+  }, [navigate]);
 
   const maskCardNumber = (cardNumber) => {
     return cardNumber ? `**** **** **** ${cardNumber.slice(-4)}` : "**** **** **** ****";
@@ -97,13 +94,15 @@ const ConfirmationPage = () => {
               <strong>Address:</strong> {formData.homeAddress || "N/A"}, {formData.state || "N/A"}, {formData.country || "N/A"}
             </CListGroupItem>
             <CListGroupItem><strong>Zip Code:</strong> {formData.zipCode || "N/A"}</CListGroupItem>
+            <CListGroupItem><strong>Account Type:</strong> {formData.accountType || "N/A"}</CListGroupItem>
+            <CListGroupItem><strong>Username:</strong> {formData.username || "N/A"}</CListGroupItem>
             <CListGroupItem><strong>Card Type:</strong> {formData.cardType || "N/A"}</CListGroupItem>
             <CListGroupItem><strong>Card Number:</strong> {maskCardNumber(formData.cardNumber)}</CListGroupItem>
             <CListGroupItem><strong>Expiry:</strong> {formData.expiryMonth || "MM"}/{formData.expiryYear || "YYYY"}</CListGroupItem>
           </CListGroup>
 
           <div className="d-flex justify-content-between mt-4">
-            <CButton color="secondary" onClick={() => navigate("/cardinfo", { state: formData })}>
+            <CButton color="secondary" onClick={() => navigate("/cardinfo")}>
               <FaArrowLeft /> Previous Step
             </CButton>
             <CButton color="success" onClick={() => alert("Form submitted successfully!")}>
@@ -117,3 +116,4 @@ const ConfirmationPage = () => {
 };
 
 export default ConfirmationPage;
+
