@@ -49,6 +49,19 @@ const ConfirmationPage = () => {
     return cardNumber ? `**** **** **** ${cardNumber.slice(-4)}` : "**** **** **** ****";
   };
 
+  const handleSubmit = () => {
+    // Clear localStorage after submission
+    localStorage.removeItem("personalInfo");
+    localStorage.removeItem("accountInfo");
+    localStorage.removeItem("cardInfo");
+
+    // Show success message
+    alert("Form submitted successfully!");
+
+    // Redirect to home page
+    navigate("/");
+  };
+
   if (loading) {
     return (
       <CContainer className="text-center mt-5">
@@ -105,7 +118,7 @@ const ConfirmationPage = () => {
             <CButton color="secondary" onClick={() => navigate("/cardinfo")}>
               <FaArrowLeft /> Previous Step
             </CButton>
-            <CButton color="success" onClick={() => alert("Form submitted successfully!")}>
+            <CButton color="success" onClick={handleSubmit}>
               Submit Form
             </CButton>
           </div>
@@ -116,4 +129,3 @@ const ConfirmationPage = () => {
 };
 
 export default ConfirmationPage;
-
